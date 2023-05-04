@@ -1,9 +1,15 @@
 package by.pavel.imageannotationbe.model;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Table(name = "annotation_user")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class User {
 
     @Id
@@ -19,4 +25,6 @@ public class User {
     @Column(name = "user_email")
     private String email;
 
+    @Column(name = "password_hash")
+    private String passwordHash;
 }

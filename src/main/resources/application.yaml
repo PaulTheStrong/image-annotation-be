@@ -6,6 +6,30 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: validate
+    show-sql: true
   liquibase:
-    enabled: false
+    enabled: true
+#  security:
+#    oauth2:
+#      client:
+#        registration:
+#          keycloak:
+#            client-id: image-annotation-tool-client
+#            authorization-grant-type: authorization_code
+#            scope: openid
+#        provider:
+#          keycloak:
+#            issuer-uri: http://localhost:8081/realms/ImageAnnotationToolRealm
+#            user-name-attribute: preferred_username
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+
+application:
+  storage:
+    upload-default-path: "D:/Diploma/annotation-image-storage/{projectId}/images"
+    upload-preview-path: "D:/Diploma/annotation-image-storage/{projectId}/preview"

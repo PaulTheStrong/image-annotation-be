@@ -1,39 +1,47 @@
 package by.pavel.imageannotationbe.model;
 
 import jakarta.persistence.*;
-
-import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "annotation")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Annotation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "image_id")
-    private Image image;
+    private AnnotationImage annotationImage;
 
-    @ManyToOne
-    @JoinColumn(name = "annotation_type_id")
+    @Column(name = "annotation_type", columnDefinition = "ANNOTATION_TYPE")
+    @Enumerated(EnumType.ORDINAL)
     private AnnotationType annotationType;
 
     @Column(name = "annotation_path")
     private String annotationPath;
 
-    @ManyToOne
-    @JoinColumn(name = "storage_type_id")
+    @Column(name = "storage_type", columnDefinition = "STORAGE_TYPE")
+    @Enumerated(EnumType.ORDINAL)
     private StorageType storageType;
 
     @Column(name = "value")
     private String value;
 
-    @ManyToOne
-    @JoinColumn(name = "annotation_status_id")
+    @Column(name = "annotation_status", columnDefinition = "ANNOTATION_STATUS")
+    @Enumerated(EnumType.ORDINAL)
     private AnnotationStatus status;
 
-    @OneToMany(mappedBy = "annotation", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<AnnotationComment> comments;
+    @ManyToOne
+    @JoinColumn(name = "annotation_tag_id")
+    private AnnotationTag annotationTag;
+
 }

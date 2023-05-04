@@ -1,11 +1,20 @@
 package by.pavel.imageannotationbe.model;
 
 import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "project")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Project {
 
     @Id
@@ -25,9 +34,8 @@ public class Project {
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ProjectRole> roles;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "annotation_type_project",
-            joinColumns = @JoinColumn(name = "project_id"),
-            inverseJoinColumns = @JoinColumn(name = "annotation_type_id"))
-    private Set<AnnotationType> allowedAnnotationTypes;
+    @Column(name = "annotation_type", columnDefinition = "ANNOTATION_TYPE")
+    @Enumerated(EnumType.ORDINAL)
+    private AnnotationType allowedAnnotationType;
+
 }

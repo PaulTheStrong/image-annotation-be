@@ -1,18 +1,7 @@
 package by.pavel.imageannotationbe.model;
 
-import jakarta.persistence.*;
+public enum AnnotationStatus {
 
-@Entity
-@Table(name = "annotation_status")
-public class AnnotationStatus {
+    IN_PROGRESS, DONE, APPROVED, DECLINED
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "annotation_status_description")
-    private String description;
-
-    @Column(name = "annotation_status_name")
-    private String name;
 }

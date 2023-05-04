@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="create-schema" author="admin">
+        <sql>
+            create table public.annotation_user (
+              id bigserial primary key,
+              user_email varchar(255),
+              user_name varchar(255),
+              password_hash varchar(255),
+              user_surname varchar(255)
+            );
+
+            create table public.license_type (
+              id bigserial primary key,
+              duration integer,
+              file_count_restriction integer,
+              file_size_restriction bigint,
+              license_name varchar(255),
+              price numeric(10, 2)
+            );
+
+            create table public.license (
+              id bigserial primary key,
+              end_date timestamp(6),
+              start_date timestamp(6),
+              license_type_id bigint constraint FK_license_license_type references public.license_type,
+              owner_id bigint constraint FK_license_user references public.annotation_user
+            );
+
+            create table public.payment (
+              id bigserial primary key,
+              payment_date_time timestamp(6),
+              price numeric(10, 2),
+              status smallint,
+              license_id bigint constraint FK_payment_license references public.license,
+              user_id bigint constraint FK_payment_user references public.annotation_user
+            );
+
+            create table public.project (
+              id bigserial primary key,
+              project_description varchar(255),
+              project_name varchar(255),
+              annotation_type smallint,
+              owner bigint constraint FK_project_owner references public.annotation_user
+            );
+
+            create table public.annotation_tag (
+               id bigserial primary key,
+               name varchar(255),
+               color varchar(7),
+               project_id bigint constraint FK_tag_project references public.project
+            );
+
+            create table public.project_invitation (
+              id bigserial primary key, invited_id bigint constraint FK_invitation_user references public.annotation_user,
+              project_id bigint constraint FK_invitation_project references public.project
+            );
+
+            create table public.role (
+              id bigserial primary key,
+              role_description varchar(255),
+              role_name varchar(255)
+            );
+
+            create table public.project_role (
+              id bigserial primary key, project_role_project_id bigint constraint FK_project_role_project references public.project,
+              project_role_role_id bigint constraint FK_project_role_role references public.role,
+              project_role_user_id bigint constraint FK_project_role_user references public.annotation_user
+            );
+
+            create table public.role_invitation (
+              project_id bigint not null constraint FK_invitation references public.project_invitation,
+              role_id bigint not null constraint FK_role references public.role,
+              primary key (project_id, role_id)
+            );
+
+            create table public.annotation_image (
+              id bigserial primary key,
+              image_name varchar(255),
+              project_id bigint constraint FK_image_project references public.project,
+              image_width int not null,
+              image_height int not null,
+              storage_type smallint
+            );
+
+            create table public.annotation (
+              id bigserial primary key,
+              annotation_path varchar(255),
+              value varchar(255),
+              annotation_type smallint,
+              image_id bigint constraint FK_annotation_image references public.annotation_image,
+              annotation_status smallint,
+              storage_type smallint,
+              annotation_tag_id bigint constraint FK_annotation_tag references public.annotation_tag
+            );
+
+            create table public.image_comment (
+              id bigserial primary key,
+              text varchar(255),
+              image_id bigint constraint FK_image_comment references public.annotation_image,
+              owner_id bigint constraint FK_annotation_owner references public.annotation_user,
+              created_at timestamp default NOW() not null,
+              is_resolved boolean default FALSE
+            );
+
+        </sql>
+    </changeSet>
+</databaseChangeLog>

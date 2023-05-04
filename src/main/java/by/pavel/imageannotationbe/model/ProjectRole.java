@@ -22,5 +22,4 @@ public class ProjectRole {
     @ManyToOne
     @JoinColumn(name = "project_role_role_id")
     private Role role;
-
 }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="add-initial-data" author="admin">
+        <sql>
+            INSERT INTO annotation_user (id, user_email) VALUES (1, 'admin@email.com');
+            INSERT INTO project (id, owner, annotation_type, project_name) VALUES (1, 1, 1, 'Project 1');
+            INSERT INTO annotation_tag (name, color, project_id) VALUES ('Cat 1', '#ff0000', 1), ('Cat 1', '#aa00aa', 1);
+            INSERT INTO public.annotation_image (id, image_name, project_id, image_width, image_height, storage_type) VALUES
+            (1, 'cats3.jpg', 1, 1000, 666, 0), (2, 'cats3.jpg', 1, 1000, 666, 0), (3, 'cats3.jpg', 1, 1000, 666, 0);
+
+        </sql>
+    </changeSet>
+</databaseChangeLog>
