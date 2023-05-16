@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
-import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "annotation_image")
@@ -16,8 +16,7 @@ import java.util.Set;
 public class AnnotationImage {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
@@ -39,4 +38,7 @@ public class AnnotationImage {
     @OneToMany(mappedBy = "image", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @OrderBy("createdAt desc")
     private List<ImageComment> comments;
+
+    @OneToMany(mappedBy = "annotationImage", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Annotation> annotations;
 }

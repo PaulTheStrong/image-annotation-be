@@ -24,6 +24,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -40,20 +41,24 @@ public class AnnotationImageService {
                 .toList();
     }
 
-    public ImageDataDto getByProjectIdAndImageId(Long projectId, Long imageId) {
+    public void deleteAllByProjectId(Long projectId) {
+        annotationImageRepository.deleteAllByProjectId(projectId);
+    }
+
+    public ImageDataDto getByProjectIdAndImageId(Long projectId, UUID imageId) {
         return annotationImageRepository.getByProjectIdAndId(projectId, imageId)
                 .map(ImageDataDto::toDto)
                 .orElseThrow(() -> new NotFoundException("Annotation Image not found with " + imageId));
     }
 
-    public byte[] downloadAnnotationImagePreview(Long projectId, Long imageId) {
+    public byte[] downloadAnnotationImagePreview(Long projectId, UUID imageId) {
         return annotationImageRepository.getByProjectIdAndId(projectId, imageId)
                 .map(annotationImage -> getImagePath(localStorageConfigurationProperties.getUploadPreviewPath(), annotationImage))
                 .map(AnnotationImageService::getFileBytes)
                 .orElseGet(() -> new byte[0]);
     }
 
-    public byte[] downloadAnnotationImage(Long projectId, Long imageId) {
+    public byte[] downloadAnnotationImage(Long projectId, UUID imageId) {
         return annotationImageRepository.getByProjectIdAndId(projectId, imageId)
                 .map(annotationImage -> getImagePath(localStorageConfigurationProperties.getUploadDefaultPath(), annotationImage))
                 .map(AnnotationImageService::getFileBytes)
@@ -77,12 +82,14 @@ public class AnnotationImageService {
         BufferedImage bufferedImage = ImageIO.read(file.getInputStream());
         int imageWidth = bufferedImage.getWidth();
         int imageHeight = bufferedImage.getHeight();
-        AnnotationImage annotationImage = new AnnotationImage(null,
+        AnnotationImage annotationImage = new AnnotationImage(
+                UUID.randomUUID(),
                 Project.builder().id(projectId).build(),
                 StorageType.LOCAL_STORAGE,
                 file.getOriginalFilename(),
                 imageWidth,
                 imageHeight,
+                Collections.emptyList(),
                 Collections.emptyList()
         );
         AnnotationImage savedEntity = annotationImageRepository.save(annotationImage);

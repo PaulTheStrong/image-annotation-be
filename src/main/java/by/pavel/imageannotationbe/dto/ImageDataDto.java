@@ -1,14 +1,13 @@
 package by.pavel.imageannotationbe.dto;
 
 import by.pavel.imageannotationbe.model.AnnotationImage;
-import by.pavel.imageannotationbe.model.ImageComment;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 
 public record ImageDataDto (
-        Long id,
+        String id,
         Long projectId,
         String fileName,
         Integer width,
@@ -17,7 +16,7 @@ public record ImageDataDto (
 
     public static ImageDataDto toDto(AnnotationImage img) {
         return new ImageDataDto(
-                img.getId(),
+                img.getId().toString(),
                 img.getProject().getId(),
                 img.getImageName(),
                 img.getWidth(),
@@ -26,14 +25,4 @@ public record ImageDataDto (
         );
     }
 
-    public static ImageDataDto toDtoNoComments(AnnotationImage image) {
-        return new ImageDataDto(
-                image.getId(),
-                image.getProject().getId(),
-                image.getImageName(),
-                image.getWidth(),
-                image.getHeight(),
-                Collections.emptyList()
-        );
-    }
 }

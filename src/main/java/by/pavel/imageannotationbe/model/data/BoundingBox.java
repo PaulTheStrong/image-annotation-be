@@ -1,9 +1,9 @@
 package by.pavel.imageannotationbe.model.data;
 
-public record BoundingBox(Integer x1, Integer y1, Integer x2, Integer y2) {
+public record BoundingBox(Integer x1, Integer y1, Integer x2, Integer y2) implements AnnotationData {
 
-    public Integer[] as2PointsArray() {
-        return new Integer[] {x1, y1, x2, y2};
+public Integer[] as2PointsArray() {
+        return new Integer[] {Math.min(x1, x2), Math.min(y1, y2), Math.max(x1, x2), Math.max(y1, y2)};
     }
 
     public Integer[] asPointWHArray() {

@@ -1,53 +1,53 @@
 package by.pavel.imageannotationbe.service;
 
 import by.pavel.imageannotationbe.dto.BoundingBoxAnnotationDto;
-import by.pavel.imageannotationbe.exception.NotFoundException;
+import by.pavel.imageannotationbe.dto.PolygonAnnotationDto;
 import by.pavel.imageannotationbe.model.*;
 import by.pavel.imageannotationbe.model.data.BoundingBox;
+import by.pavel.imageannotationbe.model.data.Point2D;
+import by.pavel.imageannotationbe.model.data.Polygon;
 import by.pavel.imageannotationbe.repository.AnnotationRepository;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import static java.util.stream.Collectors.toList;
-
 @Service
-public class BoundingBoxAnnotationService extends AbstractAnnotationService<BoundingBox, BoundingBoxAnnotationDto> {
+public class PolygonAnnotationService extends AbstractAnnotationService<Polygon, PolygonAnnotationDto> {
 
-    public BoundingBoxAnnotationService(AnnotationRepository annotationRepository, ObjectMapper objectMapper) {
+    public PolygonAnnotationService(AnnotationRepository annotationRepository, ObjectMapper objectMapper) {
         super(annotationRepository, objectMapper);
     }
 
     @Override
     protected AnnotationType getAnnotationType() {
-        return AnnotationType.BOUNDING_BOX;
+        return AnnotationType.POLYGON;
     }
 
     @Override
     @SneakyThrows
-    protected BoundingBoxAnnotationDto toDto(Annotation annotation) {
-        return new BoundingBoxAnnotationDto(
+    protected PolygonAnnotationDto toDto(Annotation annotation) {
+        return new PolygonAnnotationDto(
                 annotation.getId(),
                 annotation.getAnnotationTag().getId(),
-                BoundingBox.of2PointArray(objectMapper.readValue(annotation.getValue(), Integer[].class))
+                Arrays.stream(objectMapper.readValue(annotation.getValue(), new TypeReference<Integer[][]>() {})).map(Point2D::new).toList()
         );
     }
 
     @Override
     @SneakyThrows
-    protected Annotation toAnnotation(BoundingBoxAnnotationDto dto, UUID imageId) {
+    protected Annotation toAnnotation(PolygonAnnotationDto dto, UUID imageId) {
         return new Annotation(
                 dto.annotationId(),
                 AnnotationImage.builder().id(imageId).build(),
                 getAnnotationType(),
                 null,
                 StorageType.LOCAL_STORAGE,
-                objectMapper.writeValueAsString(dto.boundingBox().as2PointsArray()),
+                objectMapper.writeValueAsString(dto.polygon().stream().map(p -> new Integer[] {p.x(), p.y()}).toArray(Integer[][]::new)),
                 AnnotationStatus.IN_PROGRESS,
                 AnnotationTag.builder().id(dto.annotationTagId()).build()
 

@@ -31,11 +31,19 @@ public class Project {
     @JoinColumn(name = "owner")
     private User owner;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ProjectRole> roles;
-
     @Column(name = "annotation_type", columnDefinition = "ANNOTATION_TYPE")
     @Enumerated(EnumType.ORDINAL)
     private AnnotationType allowedAnnotationType;
 
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<AnnotationTag> tags;
+
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<ProjectInvitation> invitations;
+
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<ProjectRole> roles;
+
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<AnnotationImage> images;
 }

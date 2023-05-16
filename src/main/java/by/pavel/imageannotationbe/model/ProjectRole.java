@@ -11,7 +11,7 @@ public class ProjectRole {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "project_role_project_id")
     private Project project;
 

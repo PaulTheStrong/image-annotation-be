@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -21,14 +22,14 @@ public class ImageCommentService {
     private final AnnotationImageRepository imageRepository;
     private final ImageCommentRepository commentRepository;
 
-    public List<ImageCommentDto> getAll(Long projectId, Long imageId) {
+    public List<ImageCommentDto> getAll(Long projectId, UUID imageId) {
         return imageRepository.getByProjectIdAndId(projectId, imageId)
                 .map(AnnotationImage::getComments)
                 .orElseThrow(() -> new NotFoundException("Image " + imageId + " not found"))
                 .stream().map(ImageCommentDto::ofEntity).toList();
     }
 
-    public ImageCommentDto addComment(Long projectId, Long imageId, ImageCommentDto dto) {
+    public ImageCommentDto addComment(Long projectId, UUID imageId, ImageCommentDto dto) {
         AnnotationImage annotationImage = imageRepository.getByProjectIdAndId(projectId, imageId)
                 .orElseThrow(() -> new NotFoundException("Image " + imageId + " not found"));
         ImageComment imageComment = ImageComment.builder()
@@ -42,7 +43,7 @@ public class ImageCommentService {
     }
 
     @Transactional
-    public void removeComment(Long projectId, Long imageId, Long commentId) {
+    public void removeComment(Long projectId, UUID imageId, Long commentId) {
         AnnotationImage annotationImage = imageRepository.getByProjectIdAndId(projectId, imageId)
                 .orElseThrow(() -> new NotFoundException("Image " + imageId + " not found"));
 
@@ -55,7 +56,7 @@ public class ImageCommentService {
     }
 
     @Transactional
-    public void setResolved(Long projectId, Long imageId, Long commentId, boolean isResolved) {
+    public void setResolved(Long projectId, UUID imageId, Long commentId, boolean isResolved) {
         ImageComment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundException("Comment " + commentId + " not found"));
 

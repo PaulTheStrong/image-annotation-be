@@ -1,13 +1,13 @@
 package by.pavel.imageannotationbe.controller;
 
 import by.pavel.imageannotationbe.dto.ImageDataDto;
-import by.pavel.imageannotationbe.model.AnnotationImage;
 import by.pavel.imageannotationbe.service.AnnotationImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/projects/{projectId}/images")
@@ -22,17 +22,17 @@ public class AnnotationImageController {
     }
 
     @GetMapping("/{imageId}")
-    public ImageDataDto getAllByProjectAndImageId(@PathVariable Long projectId, @PathVariable Long imageId) {
+    public ImageDataDto getAllByProjectAndImageId(@PathVariable Long projectId, @PathVariable UUID imageId) {
         return annotationImageService.getByProjectIdAndImageId(projectId, imageId);
     }
 
-    @GetMapping("/{imageId}/downloadPreview")
-    public @ResponseBody byte[] downloadImagePreview(@PathVariable Long projectId, @PathVariable Long imageId) {
+    @GetMapping(value = "/{imageId}/downloadPreview", produces = {"image/jpeg", "image/png"})
+    public @ResponseBody byte[] downloadImagePreview(@PathVariable Long projectId, @PathVariable UUID imageId) {
         return annotationImageService.downloadAnnotationImagePreview(projectId, imageId);
     }
 
-    @GetMapping("/{imageId}/download")
-    public @ResponseBody byte[] downloadImage(@PathVariable Long projectId, @PathVariable Long imageId) {
+    @GetMapping(value = "/{imageId}/download", produces = {"image/png", "image/jpeg"})
+    public @ResponseBody byte[] downloadImage(@PathVariable Long projectId, @PathVariable UUID imageId) {
         return annotationImageService.downloadAnnotationImage(projectId, imageId);
     }
 

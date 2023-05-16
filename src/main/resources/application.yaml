@@ -1,8 +1,8 @@
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/annotationtool
-    username: annotation_user
-    password: 12345678
+    username: postgres
+    password: root
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -10,6 +10,9 @@ spring:
     show-sql: true
   liquibase:
     enabled: true
+  servlet:
+    multipart:
+      max-file-size: 5MB
 #  security:
 #    oauth2:
 #      client:
@@ -22,7 +25,6 @@ spring:
 #          keycloak:
 #            issuer-uri: http://localhost:8081/realms/ImageAnnotationToolRealm
 #            user-name-attribute: preferred_username
-
 logging:
   level:
     org:

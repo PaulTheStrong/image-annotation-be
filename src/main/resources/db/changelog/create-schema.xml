@@ -79,7 +79,7 @@
             );
 
             create table public.annotation_image (
-              id bigserial primary key,
+              id uuid primary key,
               image_name varchar(255),
               project_id bigint constraint FK_image_project references public.project,
               image_width int not null,
@@ -90,9 +90,9 @@
             create table public.annotation (
               id bigserial primary key,
               annotation_path varchar(255),
-              value varchar(255),
+              value text,
               annotation_type smallint,
-              image_id bigint constraint FK_annotation_image references public.annotation_image,
+              image_id uuid constraint FK_annotation_image references public.annotation_image,
               annotation_status smallint,
               storage_type smallint,
               annotation_tag_id bigint constraint FK_annotation_tag references public.annotation_tag
@@ -101,7 +101,7 @@
             create table public.image_comment (
               id bigserial primary key,
               text varchar(255),
-              image_id bigint constraint FK_image_comment references public.annotation_image,
+              image_id uuid constraint FK_image_comment references public.annotation_image,
               owner_id bigint constraint FK_annotation_owner references public.annotation_user,
               created_at timestamp default NOW() not null,
               is_resolved boolean default FALSE
