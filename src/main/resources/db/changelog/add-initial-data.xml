@@ -4,12 +4,17 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="add-initial-data" author="admin">
+    <changeSet id="add-initial-data" author="admin" runOnChange="false">
         <sql>
-            INSERT INTO annotation_user (id, user_email) VALUES (1, 'admin@email.com');
+            INSERT INTO annotation_user (id, user_email, password_hash) VALUES (1, 'admin@email.com', '$2a$10$bpMDacEyhUBVBIWUx0RlqeKFFNXpSvnhtlMjrFdDGRfPh1IWvdbkK');
             INSERT INTO project (id, owner, annotation_type, project_name) VALUES (1, 1, 1, 'Project 1');
             INSERT INTO annotation_tag (name, color, project_id) VALUES ('Cat 1', '#ff0000', 1), ('Cat 1', '#aa00aa', 1);
 
+            INSERT INTO license_type (duration, file_count_restriction, file_size_restriction, license_name, price)
+            VALUES
+                (7, 100, 1000000, 'Preview license type', 0),
+                (30, 10000, 5000000, 'Monthly license type', 25),
+                (180, 10000, 5000000, 'Half year license type', 125);
         </sql>
     </changeSet>
 </databaseChangeLog>

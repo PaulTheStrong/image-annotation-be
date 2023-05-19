@@ -25,4 +25,15 @@ public record ImageDataDto (
         );
     }
 
+    public static ImageDataDto toDtoNoComments(AnnotationImage img) {
+        return new ImageDataDto(
+                img.getId().toString(),
+                img.getProject().getId(),
+                img.getImageName(),
+                img.getWidth(),
+                img.getHeight(),
+                Collections.emptyList()
+        );
+    }
+
 }

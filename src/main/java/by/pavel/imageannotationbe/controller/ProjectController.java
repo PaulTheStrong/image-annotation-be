@@ -2,11 +2,9 @@ package by.pavel.imageannotationbe.controller;
 
 import by.pavel.imageannotationbe.dto.CreateProjectDto;
 import by.pavel.imageannotationbe.dto.ProjectDto;
-import by.pavel.imageannotationbe.model.AnnotationTag;
-import by.pavel.imageannotationbe.model.Project;
 import by.pavel.imageannotationbe.model.User;
-import by.pavel.imageannotationbe.service.AnnotationTagService;
 import by.pavel.imageannotationbe.service.ProjectService;
+import by.pavel.imageannotationbe.service.security.ProjectSecurityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,8 +18,13 @@ public class ProjectController {
     private final ProjectService projectService;
 
     @GetMapping
-    public List<ProjectDto> getAllProjects() {
-        return projectService.getAllProjects(User.builder().id(1L).build());
+    public List<ProjectDto> getOwnedProjects() {
+        return projectService.getOwnedProjects();
+    }
+
+    @GetMapping("/accessed")
+    public List<ProjectDto> getAccessedProjects() {
+        return projectService.getAccessedProjects();
     }
 
     @GetMapping("/{projectId}")
@@ -31,7 +34,7 @@ public class ProjectController {
 
     @PutMapping("/{projectId}")
     public ProjectDto updateProject(@PathVariable Long projectId, @RequestBody CreateProjectDto project) {
-        return projectService.updateProject(projectId, project, User.builder().id(1L).build());
+        return projectService.updateProject(projectId, project);
     }
 
     @DeleteMapping("/{projectId}")
@@ -41,7 +44,7 @@ public class ProjectController {
 
     @PostMapping
     public ProjectDto createProject(@RequestBody CreateProjectDto project) {
-        return projectService.createProject(project, User.builder().id(1L).build());
+        return projectService.createProject(project);
     }
 
 }

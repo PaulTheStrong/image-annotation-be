@@ -6,6 +6,7 @@ import by.pavel.imageannotationbe.model.Project;
 import by.pavel.imageannotationbe.repository.AnnotationTagRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +25,7 @@ public class AnnotationTagService {
         return annotationTag;
     }
 
+    @PreAuthorize("@projectSecurityService.canReadProject(#projectId)")
     public List<AnnotationTag> getProjectTags(Long projectId) {
         return tagRepository.findAllByProjectId(projectId);
     }

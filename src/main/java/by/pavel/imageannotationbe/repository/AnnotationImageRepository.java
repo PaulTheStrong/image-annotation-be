@@ -1,6 +1,7 @@
 package by.pavel.imageannotationbe.repository;
 
 import by.pavel.imageannotationbe.model.AnnotationImage;
+import org.hibernate.annotations.Fetch;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

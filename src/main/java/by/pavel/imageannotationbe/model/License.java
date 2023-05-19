@@ -1,11 +1,17 @@
 package by.pavel.imageannotationbe.model;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "license")
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class License {
 
     @Id
@@ -16,7 +22,7 @@ public class License {
     @JoinColumn(name = "license_type_id")
     private LicenseType licenseType;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {})
     @JoinColumn(name = "owner_id")
     private User owner;
 

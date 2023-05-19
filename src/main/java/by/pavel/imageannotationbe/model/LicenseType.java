@@ -1,11 +1,17 @@
 package by.pavel.imageannotationbe.model;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "license_type")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class LicenseType {
 
     @Id

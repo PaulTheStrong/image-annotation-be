@@ -12,11 +12,11 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import net.coobird.thumbnailator.Thumbnails;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -34,10 +34,11 @@ public class AnnotationImageService {
     private final ProjectRepository projectRepository;
     private final LocalStorageConfigurationProperties localStorageConfigurationProperties;
 
+    @PreAuthorize("@projectSecurityService.canReadProject(#projectId)")
     public List<ImageDataDto> getAllByProjectId(Long projectId) {
         return annotationImageRepository.getAllByProjectId(projectId)
                 .stream()
-                .map(ImageDataDto::toDto)
+                .map(ImageDataDto::toDtoNoComments)
                 .toList();
     }
 
@@ -45,6 +46,7 @@ public class AnnotationImageService {
         annotationImageRepository.deleteAllByProjectId(projectId);
     }
 
+    @PreAuthorize("@projectSecurityService.canReadProject(#projectId)")
     public ImageDataDto getByProjectIdAndImageId(Long projectId, UUID imageId) {
         return annotationImageRepository.getByProjectIdAndId(projectId, imageId)
                 .map(ImageDataDto::toDto)

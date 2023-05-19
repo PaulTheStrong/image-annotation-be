@@ -13,23 +13,16 @@ spring:
   servlet:
     multipart:
       max-file-size: 5MB
-#  security:
-#    oauth2:
-#      client:
-#        registration:
-#          keycloak:
-#            client-id: image-annotation-tool-client
-#            authorization-grant-type: authorization_code
-#            scope: openid
-#        provider:
-#          keycloak:
-#            issuer-uri: http://localhost:8081/realms/ImageAnnotationToolRealm
-#            user-name-attribute: preferred_username
+  security:
+
 logging:
   level:
     org:
       hibernate:
         SQL: DEBUG
+      springframework.security: DEBUG
+
+jwt.secret: secret
 
 application:
   storage:

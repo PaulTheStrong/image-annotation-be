@@ -3,6 +3,8 @@ package by.pavel.imageannotationbe.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "annotation_user")
 @Getter
@@ -27,4 +29,7 @@ public class User {
 
     @Column(name = "password_hash")
     private String passwordHash;
+
+    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
+    private List<License> licenses;
 }

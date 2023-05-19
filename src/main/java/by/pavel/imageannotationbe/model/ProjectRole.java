@@ -1,10 +1,16 @@
 package by.pavel.imageannotationbe.model;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 
 @Entity
 @Table(name = "project_role")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class ProjectRole {
 
     @Id

@@ -9,6 +9,7 @@ import by.pavel.imageannotationbe.repository.AnnotationImageRepository;
 import by.pavel.imageannotationbe.repository.ImageCommentRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,6 +23,7 @@ public class ImageCommentService {
     private final AnnotationImageRepository imageRepository;
     private final ImageCommentRepository commentRepository;
 
+    @PreAuthorize("@projectSecurityService.canReadProject(#projectId)")
     public List<ImageCommentDto> getAll(Long projectId, UUID imageId) {
         return imageRepository.getByProjectIdAndId(projectId, imageId)
                 .map(AnnotationImage::getComments)
@@ -29,6 +31,7 @@ public class ImageCommentService {
                 .stream().map(ImageCommentDto::ofEntity).toList();
     }
 
+    @PreAuthorize("@projectSecurityService.canReadProject(#projectId)")
     public ImageCommentDto addComment(Long projectId, UUID imageId, ImageCommentDto dto) {
         AnnotationImage annotationImage = imageRepository.getByProjectIdAndId(projectId, imageId)
                 .orElseThrow(() -> new NotFoundException("Image " + imageId + " not found"));
@@ -56,6 +59,7 @@ public class ImageCommentService {
     }
 
     @Transactional
+    @PreAuthorize("@projectSecurityService.canReadProject(#projectId)")
     public void setResolved(Long projectId, UUID imageId, Long commentId, boolean isResolved) {
         ImageComment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundException("Comment " + commentId + " not found"));
