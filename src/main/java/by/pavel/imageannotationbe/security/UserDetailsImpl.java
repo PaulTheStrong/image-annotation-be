@@ -1,6 +1,5 @@
 package by.pavel.imageannotationbe.security;
 
-import by.pavel.imageannotationbe.model.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -36,7 +35,7 @@ public class UserDetailsImpl implements UserDetails {
         return authorities;
     }
 
-    private boolean isAdmin() {
+    public boolean isAdmin() {
         return username.equals("admin@email.com");
     }
 

@@ -1,7 +1,6 @@
 package by.pavel.imageannotationbe.controller;
 
 import by.pavel.imageannotationbe.dto.ImageCommentDto;
-import by.pavel.imageannotationbe.model.ImageComment;
 import by.pavel.imageannotationbe.service.ImageCommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

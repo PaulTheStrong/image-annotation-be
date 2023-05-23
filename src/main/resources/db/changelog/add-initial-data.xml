@@ -17,4 +17,11 @@
                 (180, 10000, 5000000, 'Half year license type', 125);
         </sql>
     </changeSet>
+    <changeSet id="add-roles" author="admin">
+        <sql>
+            INSERT INTO role VALUES (1, 'Annotator', 'Annotator');
+            INSERT INTO role VALUES (2, 'QA', 'QA');
+            INSERT INTO role VALUES (3, 'Coordinator', 'Coordinator');
+        </sql>
+    </changeSet>
 </databaseChangeLog>

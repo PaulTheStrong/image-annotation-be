@@ -1,10 +1,9 @@
 package by.pavel.imageannotationbe.service;
 
-import by.pavel.imageannotationbe.dto.BoundingBoxAnnotationDto;
 import by.pavel.imageannotationbe.exception.NotFoundException;
-import by.pavel.imageannotationbe.model.*;
+import by.pavel.imageannotationbe.model.Annotation;
+import by.pavel.imageannotationbe.model.AnnotationType;
 import by.pavel.imageannotationbe.model.data.AnnotationData;
-import by.pavel.imageannotationbe.model.data.BoundingBox;
 import by.pavel.imageannotationbe.repository.AnnotationRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;

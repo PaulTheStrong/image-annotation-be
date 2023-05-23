@@ -1,4 +1,4 @@
-package by.pavel.imageannotationbe.controller.exceptionHandling;
+package by.pavel.imageannotationbe.exception;
 
 public class BadRequestException extends RuntimeException {
     public BadRequestException() {

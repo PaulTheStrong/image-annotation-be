@@ -35,6 +35,7 @@ public class ProjectService implements UserAware {
     }
 
     @Transactional
+    @PreAuthorize("@projectSecurityService.canEditProject(#projectId)")
     public ProjectDto updateProject(Long projectId, CreateProjectDto createProjectDto) {
         Project existingProject = projectRepository.findById(projectId)
                 .orElseThrow(() -> new NotFoundException("Project " + projectId + " not found"));
@@ -77,6 +78,14 @@ public class ProjectService implements UserAware {
                 .toList();
     }
 
+    public List<ProjectDto> getInvitedProjects() {
+        return projectRepository.findAllWhereInvited(getCurrentUser().getId())
+                .stream()
+                .map(ProjectDto::toDto)
+                .toList();
+    }
+
+
     @PreAuthorize("@projectSecurityService.canReadProject(#projectId)")
     public ProjectDto getProjectById(Long projectId) {
         return ProjectDto.toDto(projectRepository.findById(projectId)
@@ -85,6 +94,7 @@ public class ProjectService implements UserAware {
 
     @SneakyThrows
     @Transactional
+    @PreAuthorize("@projectSecurityService.canEditProject(#projectId)")
     public void removeProject(Long projectId) {
         if (projectRepository.findById(projectId).isEmpty()) {
             throw new NotFoundException("Project " + projectId + " not found");

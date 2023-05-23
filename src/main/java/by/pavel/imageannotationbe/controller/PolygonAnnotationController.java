@@ -1,8 +1,6 @@
 package by.pavel.imageannotationbe.controller;
 
 import by.pavel.imageannotationbe.dto.PolygonAnnotationDto;
-import by.pavel.imageannotationbe.dto.PolygonAnnotationDto;
-import by.pavel.imageannotationbe.service.BoundingBoxAnnotationService;
 import by.pavel.imageannotationbe.service.PolygonAnnotationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

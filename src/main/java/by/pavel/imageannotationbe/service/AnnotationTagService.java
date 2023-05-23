@@ -18,6 +18,7 @@ public class AnnotationTagService {
     private final AnnotationTagRepository tagRepository;
 
     @Transactional
+    @PreAuthorize("@projectSecurityService.canEditProject(#projectId)")
     public AnnotationTag addTag(Long projectId, AnnotationTag annotationTag) {
         annotationTag.setId(null);
         annotationTag.setProject(Project.builder().id(projectId).build());
@@ -31,11 +32,13 @@ public class AnnotationTagService {
     }
 
     @Transactional
+    @PreAuthorize("@projectSecurityService.canEditProject(#projectId)")
     public void removeTag(Long projectId, Long annotationTagId) {
         tagRepository.deleteByProjectIdAndId(projectId, annotationTagId);
     }
 
     @Transactional
+    @PreAuthorize("@projectSecurityService.canEditProject(#projectId)")
     public AnnotationTag patchTag(Long projectId, Long tagId, AnnotationTag annotationTag) {
         AnnotationTag existingTag = tagRepository.findByIdAndProjectId(tagId, projectId)
                 .orElseThrow(() -> new NotFoundException("Annotation tag not found"));

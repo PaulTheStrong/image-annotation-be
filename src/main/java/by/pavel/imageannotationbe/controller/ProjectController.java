@@ -2,9 +2,7 @@ package by.pavel.imageannotationbe.controller;
 
 import by.pavel.imageannotationbe.dto.CreateProjectDto;
 import by.pavel.imageannotationbe.dto.ProjectDto;
-import by.pavel.imageannotationbe.model.User;
 import by.pavel.imageannotationbe.service.ProjectService;
-import by.pavel.imageannotationbe.service.security.ProjectSecurityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +23,11 @@ public class ProjectController {
     @GetMapping("/accessed")
     public List<ProjectDto> getAccessedProjects() {
         return projectService.getAccessedProjects();
+    }
+
+    @GetMapping("/invited")
+    public List<ProjectDto> getInvitedProjects() {
+        return projectService.getInvitedProjects();
     }
 
     @GetMapping("/{projectId}")

@@ -1,9 +1,7 @@
 package by.pavel.imageannotationbe.service;
 
-import by.pavel.imageannotationbe.dto.BoundingBoxAnnotationDto;
 import by.pavel.imageannotationbe.dto.PolygonAnnotationDto;
 import by.pavel.imageannotationbe.model.*;
-import by.pavel.imageannotationbe.model.data.BoundingBox;
 import by.pavel.imageannotationbe.model.data.Point2D;
 import by.pavel.imageannotationbe.model.data.Polygon;
 import by.pavel.imageannotationbe.repository.AnnotationRepository;
@@ -13,7 +11,6 @@ import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 
 @Service

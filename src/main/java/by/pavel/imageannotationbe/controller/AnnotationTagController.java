@@ -4,7 +4,6 @@ import by.pavel.imageannotationbe.dto.AnnotationTagDto;
 import by.pavel.imageannotationbe.model.AnnotationTag;
 import by.pavel.imageannotationbe.service.AnnotationTagService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

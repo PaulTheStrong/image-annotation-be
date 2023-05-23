@@ -40,4 +40,9 @@ public class AnnotationImageController {
     public ImageDataDto uploadFile(@PathVariable Long projectId, @RequestParam("file") MultipartFile file) {
         return annotationImageService.uploadFile(projectId, file);
     }
+
+    @DeleteMapping("/{imageId}")
+    public void deleteFile(@PathVariable Long projectId, @PathVariable UUID imageId) {
+        annotationImageService.deleteFile(projectId, imageId);
+    }
 }

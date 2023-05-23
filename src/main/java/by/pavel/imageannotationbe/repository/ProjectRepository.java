@@ -19,4 +19,11 @@ public interface ProjectRepository extends CrudRepository<Project, Long> {
         )
     """)
     List<Project> findAccessedProjects(Long userId);
+
+    @Query(nativeQuery = true, value = """
+        SELECT * FROM project WHERE id IN (
+            SELECT DISTINCT project_id FROM project_invitation WHERE invited_id = ?1
+        )
+    """)
+    List<Project> findAllWhereInvited(Long userId);
 }

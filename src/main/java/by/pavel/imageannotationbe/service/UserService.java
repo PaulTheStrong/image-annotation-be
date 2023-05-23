@@ -1,8 +1,9 @@
 package by.pavel.imageannotationbe.service;
 
-import by.pavel.imageannotationbe.controller.exceptionHandling.BadRequestException;
+import by.pavel.imageannotationbe.exception.BadRequestException;
 import by.pavel.imageannotationbe.dto.CredentialsDto;
 import by.pavel.imageannotationbe.dto.RegistrationDto;
+import by.pavel.imageannotationbe.dto.UserDto;
 import by.pavel.imageannotationbe.model.License;
 import by.pavel.imageannotationbe.model.LicenseType;
 import by.pavel.imageannotationbe.model.User;
@@ -11,8 +12,7 @@ import by.pavel.imageannotationbe.repository.UserRepository;
 import by.pavel.imageannotationbe.security.UserDetailsImpl;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import io.micrometer.common.util.StringUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -31,11 +30,14 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class UserService implements UserDetailsService {
+public class UserService implements UserDetailsService, UserAware {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -86,5 +88,29 @@ public class UserService implements UserDetailsService {
         Map<String, String> tokens = new HashMap<>();
         tokens.put("access_token", accessToken);
         return tokens;
+    }
+
+    public UserDto getMe() {
+        Long userId = getCurrentUser().getId();
+        User user = userRepository.findById(userId).get();
+        return UserDto.toDto(user);
+    }
+
+    public UserDto updateMe(UserDto userDto) {
+        Long currentUserId = getCurrentUser().getId();
+        User user = userRepository.findById(currentUserId).get();
+        if (StringUtils.isNotBlank(userDto.name())) {
+            user.setName(userDto.name());
+        }
+
+        if (StringUtils.isNotBlank(userDto.surname())) {
+            user.setSurname(userDto.surname());
+        }
+
+        if (StringUtils.isNotBlank(userDto.password())) {
+            user.setPasswordHash(passwordEncoder.encode(userDto.password()));
+        }
+
+        return UserDto.toDtoNoLicenses(userRepository.save(user));
     }
 }

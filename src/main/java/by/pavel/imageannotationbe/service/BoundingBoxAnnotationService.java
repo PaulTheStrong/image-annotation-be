@@ -1,20 +1,14 @@
 package by.pavel.imageannotationbe.service;
 
 import by.pavel.imageannotationbe.dto.BoundingBoxAnnotationDto;
-import by.pavel.imageannotationbe.exception.NotFoundException;
 import by.pavel.imageannotationbe.model.*;
 import by.pavel.imageannotationbe.model.data.BoundingBox;
 import by.pavel.imageannotationbe.repository.AnnotationRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
-
-import static java.util.stream.Collectors.toList;
 
 @Service
 public class BoundingBoxAnnotationService extends AbstractAnnotationService<BoundingBox, BoundingBoxAnnotationDto> {

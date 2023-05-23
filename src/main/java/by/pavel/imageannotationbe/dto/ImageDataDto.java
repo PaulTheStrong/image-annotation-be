@@ -4,7 +4,6 @@ import by.pavel.imageannotationbe.model.AnnotationImage;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
 public record ImageDataDto (
         String id,

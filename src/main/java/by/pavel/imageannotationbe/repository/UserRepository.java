@@ -1,8 +1,6 @@
 package by.pavel.imageannotationbe.repository;
 
 import by.pavel.imageannotationbe.model.User;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchProfile;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,5 +10,7 @@ import java.util.Optional;
 public interface UserRepository extends CrudRepository<User, Long> {
 
     Optional<User> findByEmail(String email);
+
+    boolean existsByEmail(String email);
 
 }
