@@ -1,7 +1,6 @@
 package by.pavel.imageannotationbe.dto;
 
 import by.pavel.imageannotationbe.model.AnnotationImage;
-import by.pavel.imageannotationbe.model.AnnotationStatus;
 import by.pavel.imageannotationbe.model.User;
 
 import java.util.Collections;

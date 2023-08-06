@@ -2,7 +2,6 @@ package by.pavel.imageannotationbe.serializer;
 
 import by.pavel.imageannotationbe.model.Annotation;
 import by.pavel.imageannotationbe.model.AnnotationType;
-import by.pavel.imageannotationbe.model.data.BoundingBox;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;

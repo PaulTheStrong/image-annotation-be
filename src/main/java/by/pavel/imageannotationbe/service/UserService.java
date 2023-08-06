@@ -1,9 +1,9 @@
 package by.pavel.imageannotationbe.service;
 
-import by.pavel.imageannotationbe.exception.BadRequestException;
 import by.pavel.imageannotationbe.dto.CredentialsDto;
 import by.pavel.imageannotationbe.dto.RegistrationDto;
 import by.pavel.imageannotationbe.dto.UserDto;
+import by.pavel.imageannotationbe.exception.BadRequestException;
 import by.pavel.imageannotationbe.model.License;
 import by.pavel.imageannotationbe.model.LicenseType;
 import by.pavel.imageannotationbe.model.User;

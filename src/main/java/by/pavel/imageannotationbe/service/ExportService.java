@@ -2,13 +2,10 @@ package by.pavel.imageannotationbe.service;
 
 import by.pavel.imageannotationbe.model.Annotation;
 import by.pavel.imageannotationbe.model.AnnotationTag;
-import by.pavel.imageannotationbe.model.AnnotationType;
 import by.pavel.imageannotationbe.repository.AnnotationRepository;
 import by.pavel.imageannotationbe.repository.AnnotationTagRepository;
-import by.pavel.imageannotationbe.serializer.BoundingBoxCsvSerializer;
 import by.pavel.imageannotationbe.serializer.ExportFormat;
 import by.pavel.imageannotationbe.serializer.ExportSerializer;
-import by.pavel.imageannotationbe.serializer.PolygonCsvSerializer;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;

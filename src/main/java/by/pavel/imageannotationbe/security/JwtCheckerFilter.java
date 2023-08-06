@@ -40,7 +40,8 @@ public class JwtCheckerFilter extends OncePerRequestFilter {
                     DecodedJWT decodedJWT = verifier.verify(token);
                     String username = decodedJWT.getSubject();
                     UserDetails principal = userDetailsService.loadUserByUsername(username);
-                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
+                    UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                     logger.info("User " + username + " passed right token.");
                 } catch (JWTVerificationException e) {
