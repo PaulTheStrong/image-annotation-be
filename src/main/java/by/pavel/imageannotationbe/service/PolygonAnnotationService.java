@@ -4,6 +4,7 @@ import by.pavel.imageannotationbe.dto.PolygonAnnotationDto;
 import by.pavel.imageannotationbe.model.*;
 import by.pavel.imageannotationbe.model.data.Point2D;
 import by.pavel.imageannotationbe.model.data.Polygon;
+import by.pavel.imageannotationbe.repository.AnnotationImageRepository;
 import by.pavel.imageannotationbe.repository.AnnotationRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,8 +17,8 @@ import java.util.UUID;
 @Service
 public class PolygonAnnotationService extends AbstractAnnotationService<Polygon, PolygonAnnotationDto> {
 
-    public PolygonAnnotationService(AnnotationRepository annotationRepository, ObjectMapper objectMapper) {
-        super(annotationRepository, objectMapper);
+    public PolygonAnnotationService(AnnotationRepository annotationRepository, AnnotationImageRepository imageRepository, ObjectMapper objectMapper) {
+        super(annotationRepository, imageRepository, objectMapper);
     }
 
     @Override
@@ -45,7 +46,6 @@ public class PolygonAnnotationService extends AbstractAnnotationService<Polygon,
                 null,
                 StorageType.LOCAL_STORAGE,
                 objectMapper.writeValueAsString(dto.polygon().stream().map(p -> new Integer[] {p.x(), p.y()}).toArray(Integer[][]::new)),
-                AnnotationStatus.IN_PROGRESS,
                 AnnotationTag.builder().id(dto.annotationTagId()).build()
 
         );

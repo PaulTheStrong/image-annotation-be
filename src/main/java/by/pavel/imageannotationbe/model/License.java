@@ -22,7 +22,7 @@ public class License {
     @JoinColumn(name = "license_type_id")
     private LicenseType licenseType;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {})
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
     private User owner;
 

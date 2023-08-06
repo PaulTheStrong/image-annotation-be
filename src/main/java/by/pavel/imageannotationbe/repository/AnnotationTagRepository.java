@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 public interface AnnotationTagRepository extends CrudRepository<AnnotationTag, Long> {
 
-    List<AnnotationTag> findAllByProjectId(Long projectId);
+    List<AnnotationTag> findAllByProjectIdOrderById(Long projectId);
 
     void deleteByProjectIdAndId(Long projectId, Long id);
 

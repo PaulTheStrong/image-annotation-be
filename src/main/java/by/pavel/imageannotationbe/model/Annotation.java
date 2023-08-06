@@ -36,10 +36,6 @@ public class Annotation {
     @Column(name = "value")
     private String value;
 
-    @Column(name = "annotation_status", columnDefinition = "ANNOTATION_STATUS")
-    @Enumerated(EnumType.ORDINAL)
-    private AnnotationStatus status;
-
     @ManyToOne
     @JoinColumn(name = "annotation_tag_id")
     private AnnotationTag annotationTag;

@@ -3,5 +3,7 @@ databaseChangeLog:
       file: db/changelog/create-schema.xml
   - include:
       file: db/changelog/add-initial-data.xml
+  - include:
+      file: db/changelog/add_status_column_to_image_and_annotated_by.xml
 
 

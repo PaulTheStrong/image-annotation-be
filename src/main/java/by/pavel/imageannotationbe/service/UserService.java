@@ -50,7 +50,12 @@ public class UserService implements UserDetailsService, UserAware {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException(username));
-        return new UserDetailsImpl(user.getId(), user.getEmail(), user.getPasswordHash(), licenseRepository.existsLicenseByOwnerEmail(username));
+        return new UserDetailsImpl(
+                user.getId(),
+                user.getEmail(),
+                user.getPasswordHash(),
+                licenseRepository.existsLicenseByOwnerEmailAndEndDateAfter(username, LocalDateTime.now())
+        );
     }
 
     @Transactional

@@ -41,4 +41,12 @@ public class AnnotationImage {
 
     @OneToMany(mappedBy = "annotationImage", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Annotation> annotations;
+
+    @Column(name = "annotation_status", columnDefinition = "ANNOTATION_STATUS")
+    @Enumerated(EnumType.ORDINAL)
+    private AnnotationStatus status;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "annotated_by")
+    private User annotatedBy;
 }

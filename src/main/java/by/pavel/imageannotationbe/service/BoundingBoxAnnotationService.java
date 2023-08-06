@@ -3,6 +3,7 @@ package by.pavel.imageannotationbe.service;
 import by.pavel.imageannotationbe.dto.BoundingBoxAnnotationDto;
 import by.pavel.imageannotationbe.model.*;
 import by.pavel.imageannotationbe.model.data.BoundingBox;
+import by.pavel.imageannotationbe.repository.AnnotationImageRepository;
 import by.pavel.imageannotationbe.repository.AnnotationRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
@@ -13,8 +14,8 @@ import java.util.UUID;
 @Service
 public class BoundingBoxAnnotationService extends AbstractAnnotationService<BoundingBox, BoundingBoxAnnotationDto> {
 
-    public BoundingBoxAnnotationService(AnnotationRepository annotationRepository, ObjectMapper objectMapper) {
-        super(annotationRepository, objectMapper);
+    public BoundingBoxAnnotationService(AnnotationRepository annotationRepository, AnnotationImageRepository imageRepository, ObjectMapper objectMapper) {
+        super(annotationRepository, imageRepository, objectMapper);
     }
 
     @Override
@@ -42,9 +43,7 @@ public class BoundingBoxAnnotationService extends AbstractAnnotationService<Boun
                 null,
                 StorageType.LOCAL_STORAGE,
                 objectMapper.writeValueAsString(dto.boundingBox().as2PointsArray()),
-                AnnotationStatus.IN_PROGRESS,
                 AnnotationTag.builder().id(dto.annotationTagId()).build()
-
         );
     }
 }

@@ -2,8 +2,11 @@ package by.pavel.imageannotationbe.service;
 
 import by.pavel.imageannotationbe.exception.NotFoundException;
 import by.pavel.imageannotationbe.model.Annotation;
+import by.pavel.imageannotationbe.model.AnnotationImage;
 import by.pavel.imageannotationbe.model.AnnotationType;
+import by.pavel.imageannotationbe.model.User;
 import by.pavel.imageannotationbe.model.data.AnnotationData;
+import by.pavel.imageannotationbe.repository.AnnotationImageRepository;
 import by.pavel.imageannotationbe.repository.AnnotationRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
@@ -16,9 +19,10 @@ import java.util.UUID;
 import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
-public abstract class AbstractAnnotationService<T extends AnnotationData, D> {
+public abstract class AbstractAnnotationService<T extends AnnotationData, D> implements UserAware {
     
     protected final AnnotationRepository annotationRepository;
+    protected final AnnotationImageRepository imageRepository;
     protected final ObjectMapper objectMapper;
     
     protected abstract AnnotationType getAnnotationType();
@@ -37,6 +41,9 @@ public abstract class AbstractAnnotationService<T extends AnnotationData, D> {
     @SneakyThrows
     public D addAnnotation(UUID imageId, D dto) {
         Annotation annotation = toAnnotation(dto, imageId);
+        AnnotationImage annotationImage = imageRepository.findById(imageId).get();
+        annotationImage.setAnnotatedBy(User.builder().id(getCurrentUser().getId()).build());
+        imageRepository.save(annotationImage);
         return toDto(annotationRepository.save(annotation));
     }
 
@@ -56,6 +63,9 @@ public abstract class AbstractAnnotationService<T extends AnnotationData, D> {
         Annotation existingAnnotation = annotationRepository.findByAnnotationImageIdAndIdAndAnnotationType(imageId, annotationId, getAnnotationType())
                 .orElseThrow(() -> new NotFoundException("No bounding box annotation exist with id " + annotationId));
         existingAnnotation.setValue(toAnnotation(dto, imageId).getValue());
+        AnnotationImage annotationImage = imageRepository.findById(imageId).get();
+        annotationImage.setAnnotatedBy(User.builder().id(getCurrentUser().getId()).build());
+        imageRepository.save(annotationImage);
         return toDto(annotationRepository.save(existingAnnotation));
     }
 }
