@@ -31,5 +31,6 @@ public class User {
     private String passwordHash;
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
+    @OrderBy("endDate desc")
     private List<License> licenses;
 }

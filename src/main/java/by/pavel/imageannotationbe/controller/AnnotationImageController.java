@@ -1,6 +1,7 @@
 package by.pavel.imageannotationbe.controller;
 
 import by.pavel.imageannotationbe.dto.ImageDataDto;
+import by.pavel.imageannotationbe.model.AnnotationStatus;
 import by.pavel.imageannotationbe.service.AnnotationImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -44,5 +45,10 @@ public class AnnotationImageController {
     @DeleteMapping("/{imageId}")
     public void deleteFile(@PathVariable Long projectId, @PathVariable UUID imageId) {
         annotationImageService.deleteFile(projectId, imageId);
+    }
+
+    @PatchMapping("/{imageId}/status/{status}")
+    public void updateStatus(@PathVariable Long projectId, @PathVariable UUID imageId, @PathVariable AnnotationStatus status) {
+        annotationImageService.updateStatus(imageId, projectId, status);
     }
 }

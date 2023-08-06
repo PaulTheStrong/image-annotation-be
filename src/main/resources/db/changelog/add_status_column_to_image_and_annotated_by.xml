@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="add_annotation_status_column_and_annotated_by" author="admin" runOnChange="false">
+        <sql>
+            ALTER TABLE annotation_image ADD COLUMN annotation_status smallint;
+            ALTER TABLE annotation_image ADD COLUMN annotated_by bigint;
+            ALTER TABLE annotation_image ADD CONSTRAINT fk_image_user foreign key (annotated_by) references annotation_user;
+            ALTER TABLE annotation DROP COLUMN annotation_status;
+        </sql>
+    </changeSet>
+    <changeSet id="add_status_constraints" author="admin">
+        <sql>
+            alter table annotation_image
+                alter column annotation_status set default 0;
+            alter table annotation_image
+                alter column annotation_status set not null;
+        </sql>
+    </changeSet>
+</databaseChangeLog>

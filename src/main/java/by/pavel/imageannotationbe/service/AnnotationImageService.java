@@ -4,6 +4,7 @@ import by.pavel.imageannotationbe.config.LocalStorageConfigurationProperties;
 import by.pavel.imageannotationbe.dto.ImageDataDto;
 import by.pavel.imageannotationbe.exception.NotFoundException;
 import by.pavel.imageannotationbe.model.AnnotationImage;
+import by.pavel.imageannotationbe.model.AnnotationStatus;
 import by.pavel.imageannotationbe.model.Project;
 import by.pavel.imageannotationbe.model.StorageType;
 import by.pavel.imageannotationbe.repository.AnnotationImageRepository;
@@ -83,6 +84,13 @@ public class AnnotationImageService {
         }
     }
 
+    @PreAuthorize("@projectSecurityService.canReadProject(#projectId)")
+    public void updateStatus(UUID imageId, Long projectId, AnnotationStatus status) {
+        AnnotationImage annotationImage = annotationImageRepository.findById(imageId).get();
+        annotationImage.setStatus(status);
+        annotationImageRepository.save(annotationImage);
+    }
+
     @Transactional
     @SneakyThrows
     @PreAuthorize("@projectSecurityService.canEditProject(#projectId)")
@@ -101,7 +109,9 @@ public class AnnotationImageService {
                 imageWidth,
                 imageHeight,
                 Collections.emptyList(),
-                Collections.emptyList()
+                Collections.emptyList(),
+                AnnotationStatus.IN_PROGRESS,
+                null
         );
         AnnotationImage savedEntity = annotationImageRepository.save(annotationImage);
         String uploadPath = localStorageConfigurationProperties.getUploadDefaultPath().replace("{projectId}", projectId.toString());
@@ -124,7 +134,7 @@ public class AnnotationImageService {
 
         Thumbnails.of(file.getInputStream())
                 .size(320, 240)
-                .outputQuality(1)
+                .outputQuality(0.1)
                 .toFile(previewImageFilename);
         Files.write(imagePath, file.getBytes());
         return ImageDataDto.toDto(savedEntity);

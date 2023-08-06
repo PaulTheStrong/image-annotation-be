@@ -28,7 +28,7 @@ public class AnnotationTagService {
 
     @PreAuthorize("@projectSecurityService.canReadProject(#projectId)")
     public List<AnnotationTag> getProjectTags(Long projectId) {
-        return tagRepository.findAllByProjectId(projectId);
+        return tagRepository.findAllByProjectIdOrderById(projectId);
     }
 
     @Transactional
