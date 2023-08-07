@@ -20,11 +20,10 @@ import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 public abstract class AbstractAnnotationService<T extends AnnotationData, D> implements UserAware {
-    
+
     protected final AnnotationRepository annotationRepository;
     protected final AnnotationImageRepository imageRepository;
     protected final ObjectMapper objectMapper;
-    
     protected abstract AnnotationType getAnnotationType();
     protected abstract D toDto(Annotation annotation);
     protected abstract Annotation toAnnotation(D dto, UUID imageId);
@@ -49,18 +48,21 @@ public abstract class AbstractAnnotationService<T extends AnnotationData, D> imp
 
     @Transactional
     public void removeAnnotation(UUID imageId, Long annotationId) {
-        long deletedCount = annotationRepository.deleteAnnotationByAnnotationImageIdAndIdAndAnnotationType(imageId, annotationId, getAnnotationType());
+        long deletedCount = annotationRepository
+                .deleteAnnotationByAnnotationImageIdAndIdAndAnnotationType(imageId, annotationId, getAnnotationType());
         if (deletedCount == 0) {
             throw new NotFoundException("Annotation " + annotationId + " not found");
         } else if (deletedCount != 1) {
-            throw new RuntimeException("Deleted more that one annotation by image id " + imageId + " and id " + annotationId);
+            throw new RuntimeException("Deleted more that one annotation by image id "
+                    + imageId + " and id " + annotationId);
         }
     }
 
     @Transactional
     @SneakyThrows
     public D updateAnnotation(UUID imageId, Long annotationId, D dto) {
-        Annotation existingAnnotation = annotationRepository.findByAnnotationImageIdAndIdAndAnnotationType(imageId, annotationId, getAnnotationType())
+        Annotation existingAnnotation = annotationRepository
+                .findByAnnotationImageIdAndIdAndAnnotationType(imageId, annotationId, getAnnotationType())
                 .orElseThrow(() -> new NotFoundException("No bounding box annotation exist with id " + annotationId));
         existingAnnotation.setValue(toAnnotation(dto, imageId).getValue());
         AnnotationImage annotationImage = imageRepository.findById(imageId).get();

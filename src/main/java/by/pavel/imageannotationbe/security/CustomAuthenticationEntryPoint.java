@@ -15,7 +15,9 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     private static final String[] ALLOWED_PATHS = {"/auth", "/register"};
 
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
+    public void commence(HttpServletRequest request,
+                         HttpServletResponse response,
+                         AuthenticationException authException)
             throws IOException, ServletException {
         String requestPath = request.getRequestURI().substring(request.getContextPath().length());
 

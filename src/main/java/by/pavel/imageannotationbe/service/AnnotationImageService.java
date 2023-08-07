@@ -31,6 +31,10 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AnnotationImageService {
 
+    public static final int COMPRESSED_IMAGE_WIDTH = 320;
+    public static final int COMPRESSED_IMAGE_HEIGHT = 240;
+    public static final double COMPRESSED_IMAGE_QUALITY = 0.1;
+
     private final AnnotationImageRepository annotationImageRepository;
     private final ProjectRepository projectRepository;
     private final LocalStorageConfigurationProperties localStorageConfigurationProperties;
@@ -114,10 +118,20 @@ public class AnnotationImageService {
                 null
         );
         AnnotationImage savedEntity = annotationImageRepository.save(annotationImage);
-        String uploadPath = localStorageConfigurationProperties.getUploadDefaultPath().replace("{projectId}", projectId.toString());
-        String uploadPreviewPath = localStorageConfigurationProperties.getUploadPreviewPath().replace("{projectId}", projectId.toString());
-        String imageFilename = getImagePath(uploadPath, projectId.toString(), savedEntity.getId().toString(), savedEntity.getImageName());
-        String previewImageFilename = getImagePath(localStorageConfigurationProperties.getUploadPreviewPath(), projectId.toString(), savedEntity.getId().toString(), savedEntity.getImageName());
+        String uploadPath = localStorageConfigurationProperties.getUploadDefaultPath()
+                .replace("{projectId}", projectId.toString());
+        String uploadPreviewPath = localStorageConfigurationProperties.getUploadPreviewPath()
+                .replace("{projectId}", projectId.toString());
+        String imageFilename = getImagePath(
+                uploadPath,
+                projectId.toString(),
+                savedEntity.getId().toString(),
+                savedEntity.getImageName());
+        String previewImageFilename = getImagePath(
+                localStorageConfigurationProperties.getUploadPreviewPath(),
+                projectId.toString(),
+                savedEntity.getId().toString(),
+                savedEntity.getImageName());
 
         Path imagePath = Paths.get(imageFilename);
 
@@ -133,8 +147,8 @@ public class AnnotationImageService {
         Files.createFile(Paths.get(previewImageFilename));
 
         Thumbnails.of(file.getInputStream())
-                .size(320, 240)
-                .outputQuality(0.1)
+                .size(COMPRESSED_IMAGE_WIDTH, COMPRESSED_IMAGE_HEIGHT)
+                .outputQuality(COMPRESSED_IMAGE_QUALITY)
                 .toFile(previewImageFilename);
         Files.write(imagePath, file.getBytes());
         return ImageDataDto.toDto(savedEntity);
@@ -147,12 +161,23 @@ public class AnnotationImageService {
         if (!projectRepository.existsById(projectId)) {
             throw new NotFoundException("Project with Id=" + projectId + " not found");
         }
-        AnnotationImage image = annotationImageRepository.findById(imageId).orElseThrow(() -> new NotFoundException("Image with Id=" + imageId + " not found"));
+        AnnotationImage image = annotationImageRepository.findById(imageId)
+                .orElseThrow(() -> new NotFoundException("Image with Id=" + imageId + " not found"));
         annotationImageRepository.deleteById(imageId);
-        String uploadPath = localStorageConfigurationProperties.getUploadDefaultPath().replace("{projectId}", projectId.toString());
-        String uploadPreviewPath = localStorageConfigurationProperties.getUploadPreviewPath().replace("{projectId}", projectId.toString());
-        String imageFilename = getImagePath(uploadPath, projectId.toString(), image.getId().toString(), image.getImageName());
-        String previewImageFilename = getImagePath(uploadPreviewPath, projectId.toString(), image.getId().toString(), image.getImageName());
+        String uploadPath = localStorageConfigurationProperties.getUploadDefaultPath()
+                .replace("{projectId}", projectId.toString());
+        String uploadPreviewPath = localStorageConfigurationProperties.getUploadPreviewPath()
+                .replace("{projectId}", projectId.toString());
+        String imageFilename = getImagePath(
+                uploadPath,
+                projectId.toString(),
+                image.getId().toString(),
+                image.getImageName());
+        String previewImageFilename = getImagePath(
+                uploadPreviewPath,
+                projectId.toString(),
+                image.getId().toString(),
+                image.getImageName());
 
         Files.delete(Paths.get(imageFilename));
         Files.delete(Paths.get(previewImageFilename));

@@ -25,3 +25,5 @@ application:
   storage:
     upload-default-path: "D:/Diploma/annotation-image-storage/{projectId}/images"
     upload-preview-path: "D:/Diploma/annotation-image-storage/{projectId}/preview"
+
+STRIPE_PUBLIC_KEY: sk_test_51MxXxKDn9IcXEBBEBUuTSyPgJ3lCWzARZsHgg0TxRw9L3j63MGtvcSywGNa3CWZNqzPcLsIjS63IjXQitc3aqjgd00FAoRcPKO

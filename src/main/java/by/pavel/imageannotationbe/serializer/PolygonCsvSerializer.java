@@ -2,13 +2,10 @@ package by.pavel.imageannotationbe.serializer;
 
 import by.pavel.imageannotationbe.model.Annotation;
 import by.pavel.imageannotationbe.model.AnnotationType;
-import by.pavel.imageannotationbe.model.data.BoundingBox;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -37,7 +34,12 @@ public class PolygonCsvSerializer implements ExportSerializer {
 
     @SneakyThrows
     private void writeBbox(PrintWriter printWriter, Annotation annotation) {
-        printWriter.write(String.format("%s;%d;%s\n", annotation.getAnnotationImage().getImageName(), annotation.getAnnotationTag().getId(), annotation.getValue()));
+        String outputString = String.format(
+                "%s;%d;%s\n",
+                annotation.getAnnotationImage().getImageName(),
+                annotation.getAnnotationTag().getId(),
+                annotation.getValue());
+        printWriter.write(outputString);
     }
 
 

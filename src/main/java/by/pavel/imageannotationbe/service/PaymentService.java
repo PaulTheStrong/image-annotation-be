@@ -7,14 +7,13 @@ import by.pavel.imageannotationbe.model.User;
 import by.pavel.imageannotationbe.repository.LicenseRepository;
 import by.pavel.imageannotationbe.repository.LicenseTypeRepository;
 import by.pavel.imageannotationbe.security.UserDetailsImpl;
-import com.google.gson.Gson;
-import com.google.gson.annotations.SerializedName;
 import com.stripe.Stripe;
 import com.stripe.model.PaymentIntent;
 import com.stripe.param.PaymentIntentCreateParams;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.commons.collections4.IterableUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,21 +21,26 @@ import java.util.List;
 
 
 @Service
-@RequiredArgsConstructor
 public class PaymentService implements UserAware {
 
     private final LicenseTypeRepository licenseTypeRepository;
     private final LicenseRepository licenseRepository;
 
-    static {
-        Stripe.apiKey = "sk_test_51MxXxKDn9IcXEBBEBUuTSyPgJ3lCWzARZsHgg0TxRw9L3j63MGtvcSywGNa3CWZNqzPcLsIjS63IjXQitc3aqjgd00FAoRcPKO";
+    public PaymentService(
+            @Value("${STRIPE_PUBLIC_KEY}") String apiKey,
+            @Autowired LicenseTypeRepository licenseTypeRepository,
+            @Autowired LicenseRepository licenseRepository) {
+        Stripe.apiKey = apiKey;
+        this.licenseTypeRepository = licenseTypeRepository;
+        this.licenseRepository = licenseRepository;
     }
 
-    public record CreateIntentResponse(String clientSecret) {};
+    public record CreateIntentResponse(String clientSecret) { }
 
     @SneakyThrows
     public CreateIntentResponse createPayment(Long licenseTypeId) {
-        LicenseType licenseType = licenseTypeRepository.findById(licenseTypeId).orElseThrow(() -> new NotFoundException("License type not found"));
+        LicenseType licenseType = licenseTypeRepository.findById(licenseTypeId)
+                .orElseThrow(() -> new NotFoundException("License type not found"));
         long price = licenseType.getPrice().movePointRight(2).longValueExact();
 
         PaymentIntentCreateParams params =
@@ -57,7 +61,8 @@ public class PaymentService implements UserAware {
 
     public License createLicense(Long licenseTypeId) {
         UserDetailsImpl currentUser = getCurrentUser();
-        LicenseType licenseType = licenseTypeRepository.findById(licenseTypeId).orElseThrow(() -> new NotFoundException("License type not found"));
+        LicenseType licenseType = licenseTypeRepository.findById(licenseTypeId)
+                .orElseThrow(() -> new NotFoundException("License type not found"));
 
         License newLicense = License.builder()
                 .startDate(LocalDateTime.now())

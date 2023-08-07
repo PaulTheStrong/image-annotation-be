@@ -16,9 +16,15 @@ public interface AnnotationRepository extends CrudRepository<Annotation, Long> {
 
     List<Annotation> findAllByAnnotationTypeAndAnnotationImageId(AnnotationType annotationType, UUID annotationImageId);
 
-    Optional<Annotation> findByAnnotationImageIdAndIdAndAnnotationType(UUID annotationImageId, Long id, AnnotationType annotationType);
+    Optional<Annotation> findByAnnotationImageIdAndIdAndAnnotationType(
+            UUID annotationImageId,
+            Long id,
+            AnnotationType annotationType);
 
-    long deleteAnnotationByAnnotationImageIdAndIdAndAnnotationType(UUID annotationImageId, Long id, AnnotationType annotationType);
+    long deleteAnnotationByAnnotationImageIdAndIdAndAnnotationType(
+            UUID annotationImageId,
+            Long id,
+            AnnotationType annotationType);
 
     @EntityGraph(type = EntityGraph.EntityGraphType.FETCH, attributePaths = {
             "annotationImage.imageName",

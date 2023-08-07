@@ -1,7 +1,11 @@
 package by.pavel.imageannotationbe.service;
 
 import by.pavel.imageannotationbe.dto.BoundingBoxAnnotationDto;
-import by.pavel.imageannotationbe.model.*;
+import by.pavel.imageannotationbe.model.Annotation;
+import by.pavel.imageannotationbe.model.AnnotationImage;
+import by.pavel.imageannotationbe.model.AnnotationTag;
+import by.pavel.imageannotationbe.model.AnnotationType;
+import by.pavel.imageannotationbe.model.StorageType;
 import by.pavel.imageannotationbe.model.data.BoundingBox;
 import by.pavel.imageannotationbe.repository.AnnotationImageRepository;
 import by.pavel.imageannotationbe.repository.AnnotationRepository;
@@ -14,7 +18,10 @@ import java.util.UUID;
 @Service
 public class BoundingBoxAnnotationService extends AbstractAnnotationService<BoundingBox, BoundingBoxAnnotationDto> {
 
-    public BoundingBoxAnnotationService(AnnotationRepository annotationRepository, AnnotationImageRepository imageRepository, ObjectMapper objectMapper) {
+    public BoundingBoxAnnotationService(
+            AnnotationRepository annotationRepository,
+            AnnotationImageRepository imageRepository,
+            ObjectMapper objectMapper) {
         super(annotationRepository, imageRepository, objectMapper);
     }
 

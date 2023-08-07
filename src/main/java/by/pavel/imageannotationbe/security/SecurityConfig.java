@@ -22,13 +22,18 @@ import org.springframework.web.cors.CorsConfiguration;
 @EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfig {
 
+    public static final int BCRYPT_STRENGTH = 10;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(10);
+        return new BCryptPasswordEncoder(BCRYPT_STRENGTH);
     }
 
     @Bean
-    public AuthenticationManager authenticationProvider(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+    public AuthenticationManager authenticationProvider(
+            UserDetailsService userDetailsService,
+            PasswordEncoder passwordEncoder
+    ) {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setPasswordEncoder(passwordEncoder);
         authenticationProvider.setUserDetailsService(userDetailsService);
@@ -73,12 +78,11 @@ public class SecurityConfig {
                 .build();
     }
 
-    private static class ProjectImagesRequestMatcher implements RequestMatcher {
+    private static final class ProjectImagesRequestMatcher implements RequestMatcher {
         @Override
         public boolean matches(HttpServletRequest request) {
             String path = request.getRequestURI().substring(request.getContextPath().length());
             return path.matches("^/projects/[\\w-]+/images/[\\w-]+/download.*$");
         }
     }
-
 }

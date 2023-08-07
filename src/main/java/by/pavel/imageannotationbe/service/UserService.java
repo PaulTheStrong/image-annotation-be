@@ -1,9 +1,9 @@
 package by.pavel.imageannotationbe.service;
 
-import by.pavel.imageannotationbe.exception.BadRequestException;
 import by.pavel.imageannotationbe.dto.CredentialsDto;
 import by.pavel.imageannotationbe.dto.RegistrationDto;
 import by.pavel.imageannotationbe.dto.UserDto;
+import by.pavel.imageannotationbe.exception.BadRequestException;
 import by.pavel.imageannotationbe.model.License;
 import by.pavel.imageannotationbe.model.LicenseType;
 import by.pavel.imageannotationbe.model.User;
@@ -39,6 +39,9 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService, UserAware {
 
+    public static final int ACCESS_TOKEN_DAYS = 30;
+    public static final int PREVIEW_LICENSE_DURATION_DAYS = 7;
+    public static final long PREVIEW_LICENSE_ID = 1L;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final LicenseRepository licenseRepository;
@@ -72,20 +75,22 @@ public class UserService implements UserDetailsService, UserAware {
         );
         User saved = userRepository.save(user);
         License previewLicense = License.builder()
-                .licenseType(LicenseType.builder().id(1L).build())
+                .licenseType(LicenseType.builder().id(PREVIEW_LICENSE_ID).build())
                 .owner(saved)
                 .startDate(LocalDateTime.now())
-                .endDate(LocalDateTime.now().plusDays(7))
+                .endDate(LocalDateTime.now().plusDays(PREVIEW_LICENSE_DURATION_DAYS))
                 .build();
         licenseRepository.save(previewLicense);
     }
 
     @SneakyThrows
     public Map<String, String> generateToken(CredentialsDto credentials) {
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(credentials.email(), credentials.password());
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                credentials.email(),
+                credentials.password());
         UserDetailsImpl user = (UserDetailsImpl) (authenticationManager.authenticate(authentication).getPrincipal());
         Algorithm algorithm = Algorithm.HMAC256("secret".getBytes(StandardCharsets.UTF_8));
-        Instant accessTokenExpiresAt = OffsetDateTime.now().plusDays(30).toInstant();
+        Instant accessTokenExpiresAt = OffsetDateTime.now().plusDays(ACCESS_TOKEN_DAYS).toInstant();
         String accessToken = JWT.create()
                 .withSubject(user.getUsername())
                 .withExpiresAt(new Date(accessTokenExpiresAt.toEpochMilli()))

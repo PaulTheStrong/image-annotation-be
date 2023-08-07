@@ -23,7 +23,8 @@ public class ProjectSecurityService implements UserAware {
 
     public boolean canEditProject(Long projectId) {
         UserDetailsImpl currentUser = getCurrentUser();
-        return currentUser.isAdmin() || currentUser.isLicensed() && projectRepository.existsByOwnerIdAndId(currentUser.getId(), projectId);
+        return currentUser.isAdmin()
+                || currentUser.isLicensed() && projectRepository.existsByOwnerIdAndId(currentUser.getId(), projectId);
     }
 
     public boolean canAcceptInvite(Long projectId) {

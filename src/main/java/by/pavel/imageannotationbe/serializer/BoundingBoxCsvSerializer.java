@@ -13,6 +13,11 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import static by.pavel.imageannotationbe.model.data.BoundingBox.HEIGHT_IDX;
+import static by.pavel.imageannotationbe.model.data.BoundingBox.WIDTH_IDX;
+import static by.pavel.imageannotationbe.model.data.BoundingBox.X_START_IDX;
+import static by.pavel.imageannotationbe.model.data.BoundingBox.Y_START_IDX;
+
 @Service
 @RequiredArgsConstructor
 public class BoundingBoxCsvSerializer implements ExportSerializer {
@@ -37,8 +42,16 @@ public class BoundingBoxCsvSerializer implements ExportSerializer {
 
     @SneakyThrows
     private void writeBbox(PrintWriter printWriter, Annotation annotation) {
-        Integer[] data = BoundingBox.of2PointArray(objectMapper.readValue(annotation.getValue(), Integer[].class)).asPointWHArray();
-        printWriter.write(String.format("%s;%d;%d;%d;%d;%d\n", annotation.getAnnotationImage().getImageName(), annotation.getAnnotationTag().getId(), data[0], data[1], data[2], data[3]));
+        Integer[] pointsArray = objectMapper.readValue(annotation.getValue(), Integer[].class);
+        Integer[] data = BoundingBox.of2PointArray(pointsArray).asPointWHArray();
+        String formatedBboxData = String.format(
+                "%s;%d;%d;%d;%d;%d\n", annotation.getAnnotationImage().getImageName(),
+                annotation.getAnnotationTag().getId(),
+                data[X_START_IDX],
+                data[Y_START_IDX],
+                data[WIDTH_IDX],
+                data[HEIGHT_IDX]);
+        printWriter.write(formatedBboxData);
     }
 
 }

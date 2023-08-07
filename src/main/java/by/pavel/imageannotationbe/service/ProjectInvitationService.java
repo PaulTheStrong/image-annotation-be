@@ -1,10 +1,14 @@
 package by.pavel.imageannotationbe.service;
 
+import by.pavel.imageannotationbe.dto.InvitationBatchDto;
 import by.pavel.imageannotationbe.dto.ProjectInvitationDto;
 import by.pavel.imageannotationbe.exception.BadRequestException;
-import by.pavel.imageannotationbe.dto.InvitationBatchDto;
 import by.pavel.imageannotationbe.exception.NotFoundException;
-import by.pavel.imageannotationbe.model.*;
+import by.pavel.imageannotationbe.model.Project;
+import by.pavel.imageannotationbe.model.ProjectInvitation;
+import by.pavel.imageannotationbe.model.ProjectRole;
+import by.pavel.imageannotationbe.model.Role;
+import by.pavel.imageannotationbe.model.User;
 import by.pavel.imageannotationbe.repository.ProjectInvitationRepository;
 import by.pavel.imageannotationbe.repository.ProjectRepository;
 import by.pavel.imageannotationbe.repository.ProjectRoleRepository;
@@ -59,7 +63,10 @@ public class ProjectInvitationService implements UserAware {
             throw new NotFoundException("Cannot find invite with id " + invitationId);
         }
         ProjectInvitation invitation = invite.get();
-        invitation.setRoles(roleIds.stream().map(roleId -> Role.builder().id(roleId).build()).collect(Collectors.toSet()));
+        invitation.setRoles(roleIds.stream()
+                .map(roleId -> Role.builder().id(roleId).build())
+                .collect(Collectors.toSet())
+        );
 
         ProjectInvitation saved = projectInvitationRepository.save(invitation);
         return new ProjectInvitationDto(saved.getId(), invitation.getInvitedUser().getEmail(), roleIds);
@@ -88,8 +95,9 @@ public class ProjectInvitationService implements UserAware {
     @Transactional
     public void acceptInvite(Long projectId) {
         Long currentUserId = getCurrentUser().getId();
-        ProjectInvitation invitation = projectInvitationRepository.findByProjectIdAndInvitedUserId(projectId, currentUserId)
-                .orElseThrow(() -> new NotFoundException("Invitation not found for project " + projectId + " and user " + currentUserId));
+        ProjectInvitation invitation = projectInvitationRepository
+                .findByProjectIdAndInvitedUserId(projectId, currentUserId)
+                .orElseThrow(() -> getNotFoundException(projectId, currentUserId));
 
         List<ProjectRole> projectRoles = invitation.getRoles().stream()
                 .map(inviteRole -> ProjectRole.builder()
@@ -103,11 +111,16 @@ public class ProjectInvitationService implements UserAware {
         projectInvitationRepository.delete(invitation);
     }
 
+    private static NotFoundException getNotFoundException(Long projectId, Long currentUserId) {
+        return new NotFoundException("Invitation not found for project " + projectId + " and user " + currentUserId);
+    }
+
     @Transactional
     public void denyInvite(Long projectId) {
         Long currentUserId = getCurrentUser().getId();
-        ProjectInvitation invitation = projectInvitationRepository.findByProjectIdAndInvitedUserId(projectId, currentUserId)
-                .orElseThrow(() -> new NotFoundException("Invitation not found for project " + projectId + " and user " + currentUserId));
+        ProjectInvitation invitation = projectInvitationRepository
+                .findByProjectIdAndInvitedUserId(projectId, currentUserId)
+                .orElseThrow(() -> getNotFoundException(projectId, currentUserId));
         projectInvitationRepository.delete(invitation);
     }
 
