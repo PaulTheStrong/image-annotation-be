@@ -16,20 +16,30 @@ import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
-public class SecurityErrorHandler implements AuthenticationFailureHandler, AuthenticationEntryPoint, AccessDeniedHandler {
+public class SecurityErrorHandler
+        implements AuthenticationFailureHandler, AuthenticationEntryPoint, AccessDeniedHandler {
 
     @Override
-    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
+    public void onAuthenticationFailure(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            AuthenticationException exception
+    ) throws IOException, ServletException {
         sendError("Invalid username or password", response);
     }
 
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException
+    ) throws IOException, ServletException {
         sendError("Access denied", response);
     }
 
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
+    public void handle(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            AccessDeniedException accessDeniedException
+    ) throws IOException, ServletException {
         sendError("Not enough rights", response);
     }
 

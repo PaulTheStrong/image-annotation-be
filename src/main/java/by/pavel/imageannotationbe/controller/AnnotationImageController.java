@@ -56,7 +56,11 @@ public class AnnotationImageController {
     }
 
     @PatchMapping("/{imageId}/status/{status}")
-    public void updateStatus(@PathVariable Long projectId, @PathVariable UUID imageId, @PathVariable AnnotationStatus status) {
+    public void updateStatus(
+            @PathVariable Long projectId,
+            @PathVariable UUID imageId,
+            @PathVariable AnnotationStatus status
+    ) {
         annotationImageService.updateStatus(imageId, projectId, status);
     }
 }

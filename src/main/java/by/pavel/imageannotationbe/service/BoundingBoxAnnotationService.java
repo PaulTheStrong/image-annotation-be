@@ -18,7 +18,10 @@ import java.util.UUID;
 @Service
 public class BoundingBoxAnnotationService extends AbstractAnnotationService<BoundingBox, BoundingBoxAnnotationDto> {
 
-    public BoundingBoxAnnotationService(AnnotationRepository annotationRepository, AnnotationImageRepository imageRepository, ObjectMapper objectMapper) {
+    public BoundingBoxAnnotationService(
+            AnnotationRepository annotationRepository,
+            AnnotationImageRepository imageRepository,
+            ObjectMapper objectMapper) {
         super(annotationRepository, imageRepository, objectMapper);
     }
 

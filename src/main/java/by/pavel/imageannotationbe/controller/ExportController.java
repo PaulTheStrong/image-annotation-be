@@ -22,13 +22,20 @@ public class ExportController {
     private final ExportService exportService;
 
     @PostMapping(value = "/csv", produces = "application/zip")
-    public void exportDataCsv(HttpServletResponse response, @PathVariable Long projectId, @RequestBody Set<UUID> imageIds) throws IOException {
+    public void exportDataCsv(
+            HttpServletResponse response,
+            @PathVariable Long projectId,
+            @RequestBody Set<UUID> imageIds) throws IOException {
         response.addHeader("Content-Disposition", "attachment; filename=\"csv.zip\"");
         exportService.exportData(imageIds, projectId, response.getOutputStream(), ExportFormat.CSV);
     }
 
     @PostMapping(value = "/json", produces = "application/zip")
-    public void exportDataJson(HttpServletResponse response, @PathVariable Long projectId, @RequestBody Set<UUID> imageIds) throws IOException {
+    public void exportDataJson(
+            HttpServletResponse response,
+            @PathVariable Long projectId,
+            @RequestBody Set<UUID> imageIds
+    ) throws IOException {
         response.addHeader("Content-Disposition", "attachment; filename=\"json.zip\"");
         exportService.exportData(imageIds, projectId, response.getOutputStream(), ExportFormat.JSON);
     }

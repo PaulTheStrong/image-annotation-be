@@ -34,7 +34,12 @@ public class PolygonCsvSerializer implements ExportSerializer {
 
     @SneakyThrows
     private void writeBbox(PrintWriter printWriter, Annotation annotation) {
-        printWriter.write(String.format("%s;%d;%s\n", annotation.getAnnotationImage().getImageName(), annotation.getAnnotationTag().getId(), annotation.getValue()));
+        String outputString = String.format(
+                "%s;%d;%s\n",
+                annotation.getAnnotationImage().getImageName(),
+                annotation.getAnnotationTag().getId(),
+                annotation.getValue());
+        printWriter.write(outputString);
     }
 
 

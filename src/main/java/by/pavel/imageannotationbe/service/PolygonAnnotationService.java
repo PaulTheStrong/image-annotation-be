@@ -21,7 +21,10 @@ import java.util.UUID;
 @Service
 public class PolygonAnnotationService extends AbstractAnnotationService<Polygon, PolygonAnnotationDto> {
 
-    public PolygonAnnotationService(AnnotationRepository annotationRepository, AnnotationImageRepository imageRepository, ObjectMapper objectMapper) {
+    public PolygonAnnotationService(
+            AnnotationRepository annotationRepository,
+            AnnotationImageRepository imageRepository,
+            ObjectMapper objectMapper) {
         super(annotationRepository, imageRepository, objectMapper);
     }
 
@@ -36,7 +39,8 @@ public class PolygonAnnotationService extends AbstractAnnotationService<Polygon,
         return new PolygonAnnotationDto(
                 annotation.getId(),
                 annotation.getAnnotationTag().getId(),
-                Arrays.stream(objectMapper.readValue(annotation.getValue(), new TypeReference<Integer[][]>() {})).map(Point2D::new).toList()
+                Arrays.stream(objectMapper.readValue(annotation.getValue(), new TypeReference<Integer[][]>() { }))
+                        .map(Point2D::new).toList()
         );
     }
 
@@ -49,7 +53,11 @@ public class PolygonAnnotationService extends AbstractAnnotationService<Polygon,
                 getAnnotationType(),
                 null,
                 StorageType.LOCAL_STORAGE,
-                objectMapper.writeValueAsString(dto.polygon().stream().map(p -> new Integer[] {p.x(), p.y()}).toArray(Integer[][]::new)),
+                objectMapper.writeValueAsString(
+                        dto.polygon().stream()
+                        .map(p -> new Integer[] {p.x(), p.y()})
+                        .toArray(Integer[][]::new)
+                ),
                 AnnotationTag.builder().id(dto.annotationTagId()).build()
 
         );

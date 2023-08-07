@@ -28,7 +28,10 @@ public class BoundingBoxAnnotationController {
     }
 
     @PostMapping
-    public BoundingBoxAnnotationDto addAnnotation(@PathVariable UUID imageId, @RequestBody BoundingBoxAnnotationDto dto) {
+    public BoundingBoxAnnotationDto addAnnotation(
+            @PathVariable UUID imageId,
+            @RequestBody BoundingBoxAnnotationDto dto
+    ) {
         return annotationService.addAnnotation(imageId, dto);
     }
 

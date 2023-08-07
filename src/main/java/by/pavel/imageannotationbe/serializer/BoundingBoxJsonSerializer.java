@@ -15,6 +15,10 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import static by.pavel.imageannotationbe.model.data.BoundingBox.HEIGHT_IDX;
+import static by.pavel.imageannotationbe.model.data.BoundingBox.WIDTH_IDX;
+import static by.pavel.imageannotationbe.model.data.BoundingBox.X_START_IDX;
+import static by.pavel.imageannotationbe.model.data.BoundingBox.Y_START_IDX;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
@@ -31,7 +35,10 @@ public class BoundingBoxJsonSerializer implements ExportSerializer {
         PrintWriter printWriter = new PrintWriter(outputStream);
         Map<String, List<BBoxJsonEntry>> bboxes = annotations.stream()
                 .filter(annotation -> AnnotationType.BOUNDING_BOX.equals(annotation.getAnnotationType()))
-                .collect(groupingBy(BoundingBoxJsonSerializer::imageNameFunc, Collectors.mapping(this::toJsonEntry, toList())));
+                .collect(groupingBy(
+                        BoundingBoxJsonSerializer::imageNameFunc,
+                        Collectors.mapping(this::toJsonEntry, toList()))
+                );
         printWriter.print(objectMapper.writeValueAsString(bboxes));
         printWriter.flush();
         outputStream.closeEntry();
@@ -48,7 +55,12 @@ public class BoundingBoxJsonSerializer implements ExportSerializer {
 
     @SneakyThrows
     private BBoxJsonEntry toJsonEntry(Annotation annotation) {
-        Integer[] data = BoundingBox.of2PointArray(objectMapper.readValue(annotation.getValue(), Integer[].class)).asPointWHArray();
-        return new BBoxJsonEntry(annotation.getId(), data[0], data[1], data[2], data[3]);
+        Integer[] pointsArray = objectMapper.readValue(annotation.getValue(), Integer[].class);
+        Integer[] data = BoundingBox.of2PointArray(pointsArray).asPointWHArray();
+        return new BBoxJsonEntry(annotation.getId(),
+                data[X_START_IDX],
+                data[Y_START_IDX],
+                data[WIDTH_IDX],
+                data[HEIGHT_IDX]);
     }
 }

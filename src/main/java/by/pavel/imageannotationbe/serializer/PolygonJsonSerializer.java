@@ -31,7 +31,10 @@ public class PolygonJsonSerializer implements ExportSerializer {
         PrintWriter printWriter = new PrintWriter(outputStream);
         Map<String, List<PolygonJsonEntry>> bboxes = annotations.stream()
                 .filter(annotation -> AnnotationType.POLYGON.equals(annotation.getAnnotationType()))
-                .collect(groupingBy(PolygonJsonSerializer::imageNameFunc, Collectors.mapping(this::toJsonEntry, toList())));
+                .collect(groupingBy(
+                        PolygonJsonSerializer::imageNameFunc,
+                        Collectors.mapping(this::toJsonEntry, toList()))
+                );
         printWriter.print(objectMapper.writeValueAsString(bboxes));
         printWriter.flush();
         outputStream.closeEntry();
@@ -48,6 +51,7 @@ public class PolygonJsonSerializer implements ExportSerializer {
 
     @SneakyThrows
     private PolygonJsonEntry toJsonEntry(Annotation annotation) {
-        return new PolygonJsonEntry(annotation.getId(), objectMapper.readValue(annotation.getValue(), new TypeReference<>() {}));
+        int[][] points = objectMapper.readValue(annotation.getValue(), new TypeReference<>() { });
+        return new PolygonJsonEntry(annotation.getId(), points);
     }
 }

@@ -29,7 +29,10 @@ public class JwtCheckerFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain) throws ServletException, IOException {
         if (!request.getRequestURI().equals("/token")) {
             String authorizationHeader = request.getHeader(AUTHORIZATION);
             if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
@@ -45,7 +48,7 @@ public class JwtCheckerFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                     logger.info("User " + username + " passed right token.");
                 } catch (JWTVerificationException e) {
-                    throw new AuthenticationException(e.getMessage()) {};
+                    throw new AuthenticationException(e.getMessage()) { };
                 } catch (Exception e) {
                     throw new FilterException(e);
                 }

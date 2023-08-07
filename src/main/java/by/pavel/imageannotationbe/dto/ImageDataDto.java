@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public record ImageDataDto (
+public record ImageDataDto(
         String id,
         Long projectId,
         String fileName,
