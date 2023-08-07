@@ -4,7 +4,7 @@ on:
     branches:
       - master
     paths:
-      - 'src/main/***'
+      - 'src/main/**'
 jobs:
   build-push-docker:
     runs-on: ubuntu-latest
