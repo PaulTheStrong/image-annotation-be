@@ -29,9 +29,10 @@ jobs:
       - name: Build docker image
         run: mvn spring-boot:build-image
       - name: Export version variable
-        run: export APP_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+        run: |
+          echo "APP_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> "$GITHUB_ENV"
       - name: Tag docker image
-        run: docker tag image-annotation-be:$APP_VERSION ${{ secrets.DOCKER_USERNAME }}/image-annotation-be:$APP_VERSION
+        run: docker tag image-annotation-be:$APP_VERSION ${{ secrets.DOCKER_USERNAME }}/image-annotation-be:${{ env.APP_VERSION }}
       - name: Push to docker hub
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/image-annotation-be:$APP_VERSION
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/image-annotation-be:${{ env.APP_VERSION }}
 
