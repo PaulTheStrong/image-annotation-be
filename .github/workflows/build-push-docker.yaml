@@ -28,6 +28,10 @@ jobs:
         run: mvn -B package --file pom.xml
       - name: Build docker image
         run: mvn spring-boot:build-image
+      - name: Export version variable
+        run: export APP_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+      - name: Tag docker image
+        run: docker tag image-annotation-be:$APP_VERSION ${{ secrets.DOCKER_USERNAME }}/image-annotation-be:$APP_VERSION
       - name: Push to docker hub
-        run: docker push image-annotation-be:$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/image-annotation-be:$APP_VERSION
 
