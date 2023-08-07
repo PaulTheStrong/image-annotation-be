@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - master
+    paths:
+      - 'src/main/***'
 jobs:
   build-push-docker:
     runs-on: ubuntu-latest
