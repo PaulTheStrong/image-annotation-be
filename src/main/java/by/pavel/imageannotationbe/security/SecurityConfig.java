@@ -20,6 +20,7 @@ import org.springframework.web.cors.CorsConfiguration;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true)
+@SecurityEnabled
 public class SecurityConfig {
 
     public static final int BCRYPT_STRENGTH = 10;
