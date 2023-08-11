@@ -1,6 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/annotationtool
+    host: localhost:5432
+    dbname: annotationtool
+    url: jdbc:postgresql://${spring.datasource.host}/${spring.datasource.dbname}
     username: postgres
     password: root
     driver-class-name: org.postgresql.Driver
@@ -23,7 +25,8 @@ logging:
 
 application:
   storage:
-    upload-default-path: "D:/Diploma/annotation-image-storage/{projectId}/images"
-    upload-preview-path: "D:/Diploma/annotation-image-storage/{projectId}/preview"
+    base-path: "D:/Diploma/annotation-image-storage"
+    upload-default-path: "${application.storage.base-path}/{projectId}/images"
+    upload-preview-path: "${application.storage.base-path}/{projectId}/preview"
 
 STRIPE_PUBLIC_KEY: sk_test_51MxXxKDn9IcXEBBEBUuTSyPgJ3lCWzARZsHgg0TxRw9L3j63MGtvcSywGNa3CWZNqzPcLsIjS63IjXQitc3aqjgd00FAoRcPKO
