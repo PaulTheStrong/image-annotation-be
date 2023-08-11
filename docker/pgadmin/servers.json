@@ -1,0 +1,14 @@
+{
+  "Servers": {
+    "image-annotation-backend": {
+      "Name": "Image annotation backend",
+      "Group": "Backend",
+      "Port": 5432,
+      "Username": "postgres",
+      "Host": "postgres-image-annotation-be",
+      "MaintenanceDB": "annotationtool",
+      "PassFile": "/pgpass",
+      "SSLMode": "prefer"
+    }
+  }
+}
