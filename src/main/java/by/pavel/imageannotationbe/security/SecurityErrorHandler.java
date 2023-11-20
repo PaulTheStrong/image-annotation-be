@@ -16,6 +16,7 @@ import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
+@SecurityEnabled
 public class SecurityErrorHandler
         implements AuthenticationFailureHandler, AuthenticationEntryPoint, AccessDeniedHandler {
 

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 @Component
+@SecurityEnabled
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     private static final String[] ALLOWED_PATHS = {"/auth", "/register"};

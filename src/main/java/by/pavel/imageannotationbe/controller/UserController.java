@@ -29,12 +29,12 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    private UserDto getMe() {
+    public UserDto getMe() {
         return userService.getMe();
     }
 
     @PostMapping("/me")
-    private UserDto updateMe(@RequestBody UserDto userDto) {
+    public UserDto updateMe(@RequestBody UserDto userDto) {
         return userService.updateMe(userDto);
     }
 }

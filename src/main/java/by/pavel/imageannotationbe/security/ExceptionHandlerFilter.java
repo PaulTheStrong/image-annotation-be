@@ -14,6 +14,7 @@ import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
+@SecurityEnabled
 public class ExceptionHandlerFilter extends OncePerRequestFilter {
 
     private final SecurityErrorHandler handler;
