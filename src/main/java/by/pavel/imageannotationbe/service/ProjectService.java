@@ -12,6 +12,7 @@ import by.pavel.imageannotationbe.repository.ProjectRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -21,8 +22,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static net.logstash.logback.argument.StructuredArguments.kv;
+
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ProjectService implements UserAware {
 
     private final LocalStorageConfigurationProperties storageProps;
@@ -42,6 +46,7 @@ public class ProjectService implements UserAware {
 
         existingProject.setName(createProjectDto.project().name());
         existingProject.setDescription(createProjectDto.project().description());
+        log.info("Updated project {}", kv("projectId", existingProject.getId()));
         return ProjectDto.toDto(projectRepository.save(existingProject));
     }
 
@@ -61,6 +66,7 @@ public class ProjectService implements UserAware {
         Project saved = projectRepository.save(createdProject);
         tags.forEach(tag -> tag.setProject(saved));
         tagRepository.saveAll(tags);
+        log.info("Created project '{}' with id {}", saved.getName(), saved.getId());
         return ProjectDto.toDto(saved);
     }
 

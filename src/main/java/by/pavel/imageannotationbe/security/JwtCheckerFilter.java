@@ -46,7 +46,7 @@ public class JwtCheckerFilter extends OncePerRequestFilter {
                     UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                    logger.info("User " + username + " passed right token.");
+                    log.info("User {} passed right token.", username);
                 } catch (JWTVerificationException e) {
                     throw new AuthenticationException(e.getMessage()) { };
                 } catch (Exception e) {

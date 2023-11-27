@@ -9,7 +9,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
-    show-sql: true
+    show-sql: false
   liquibase:
     enabled: true
   servlet:
@@ -17,11 +17,12 @@ spring:
       max-file-size: 5MB
 
 logging:
+  file:
+    path: /var/log/image-annotation-be.log
   level:
     org:
       hibernate:
-        SQL: DEBUG
-      springframework.security: DEBUG
+        SQL: ERROR
 
 application:
   storage:
